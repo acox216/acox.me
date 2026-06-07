@@ -17,3 +17,6 @@ npm-debug.log*
 
 # os
 .DS_Store
+
+# local editor / tooling
+.claude/
