@@ -7,11 +7,6 @@
 	--muted: #8b949e;
 	--accent: #58a6ff;
 
-	--wp-warm: rgba(156, 122, 82, 0.55);
-	--wp-mid: rgba(40, 44, 70, 0.65);
-	--wp-cool: rgba(66, 95, 199, 0.6);
-	--wp-glow: rgba(88, 166, 255, 0.25);
-
 	--menubar-h: 30px;
 }
 
@@ -29,34 +24,27 @@ body {
 body {
 	color: var(--text);
 	font-family: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
-	display: flex;
-	align-items: center;
-	justify-content: center;
 	min-height: 100vh;
-	padding: calc(var(--menubar-h) + 1.5rem) 1.5rem 1.5rem;
 	line-height: 1.6;
 	position: relative;
-	overflow: hidden;
+	overflow-x: hidden;
 	background: var(--bg);
 }
 
-/* ---- desktop wallpaper ---- */
-body::before {
-	content: "";
-	position: fixed;
-	inset: 0;
-	z-index: -2;
-	background: linear-gradient(
-			155deg,
-			var(--wp-warm) 0%,
-			var(--wp-mid) 45%,
-			var(--wp-cool) 100%
-		),
-		radial-gradient(120% 120% at 80% 10%, var(--wp-glow) 0%, transparent 55%);
-	background-color: var(--bg);
+/*
+ * Homepage "desktop": a fixed, non-scrolling viewport with the window centered.
+ * Document pages (blog) omit this class so they scroll normally.
+ */
+body.is-desktop {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100vh;
+	padding: calc(var(--menubar-h) + 1.5rem) 1.5rem 1.5rem;
+	overflow: hidden;
 }
 
-/* faint dotted grid + vignette */
+/* faint dotted grid + vignette (sits above the <Wallpaper /> layer) */
 body::after {
 	content: "";
 	position: fixed;
@@ -130,6 +118,19 @@ body::after {
 
 .menubar .menu > button:hover,
 .menubar .menu.open > button {
+	background: rgba(255, 255, 255, 0.12);
+}
+
+/* direct-link menu entry (e.g. "Blog") */
+.menubar .menu-link {
+	color: rgba(255, 255, 255, 0.82);
+	text-decoration: none;
+	padding: 0.2rem 0.55rem;
+	border-radius: 6px;
+	transition: background 0.15s ease;
+}
+
+.menubar .menu-link:hover {
 	background: rgba(255, 255, 255, 0.12);
 }
 
@@ -213,6 +214,34 @@ body::after {
 	padding: 0.75rem 1rem;
 	background: #0d1117;
 	border-bottom: 1px solid var(--border);
+}
+
+/* ---- draggable window ---- */
+/* Drag affordance only on desktop pointers; mobile leaves the bar alone. */
+@media (min-width: 768px) and (pointer: fine) {
+	.card[data-window] .bar {
+		cursor: grab;
+		user-select: none;
+	}
+	.card[data-window].is-dragging .bar {
+		cursor: grabbing;
+	}
+}
+
+/* Suppress text selection while a drag is active. */
+body.is-dragging {
+	user-select: none;
+}
+
+/*
+ * Once the entrance animation finishes (or is skipped), JS adds `committed`.
+ * This hands transform control to inline styles: the animation is removed (so
+ * it no longer overrides inline transform) and opacity is pinned visible.
+ */
+.card[data-window].committed {
+	animation: none;
+	opacity: 1;
+	will-change: transform;
 }
 
 .dot {
