@@ -1,0 +1,33 @@
+---
+import "../styles/global.css";
+import { config } from "../config";
+
+const wp = config.wallpaper;
+// Inject theme values from config as :root custom properties (build-time).
+const rootVars = `:root{--accent:${config.accent};--bg:${wp.base};--wp-warm:${wp.warm};--wp-mid:${wp.mid};--wp-cool:${wp.cool};--wp-glow:${wp.glow};}`;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>{config.name}</title>
+		<meta name="description" content={config.description} />
+		<meta property="og:title" content={config.name} />
+		<meta property="og:description" content={config.description} />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content="https://acox.me" />
+		<link rel="canonical" href="https://acox.me/" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
+			rel="stylesheet"
+		/>
+		<style set:html={rootVars}></style>
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>

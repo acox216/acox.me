@@ -1,0 +1,24 @@
+/**
+ * Cloudflare Workers config for deploying the Astro build.
+ * Docs: https://developers.cloudflare.com/workers/wrangler/configuration/
+ *
+ * `main` points at the adapter's server entrypoint so on-demand routes work
+ * once we add them (export const prerender = false). Until then every page is
+ * prerendered into ./dist/client and served as a static asset.
+ *
+ * Deploy:  npm run build && npx wrangler deploy
+ */
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "acox-me",
+	"main": "@astrojs/cloudflare/entrypoints/server",
+	"compatibility_date": "2026-04-15",
+	"compatibility_flags": ["nodejs_compat"],
+	"assets": {
+		"directory": "./dist/client",
+		"binding": "ASSETS"
+	},
+	"observability": {
+		"enabled": true
+	}
+}

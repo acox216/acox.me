@@ -1,0 +1,40 @@
+---
+import { config } from "../config";
+import { icons } from "../icons";
+---
+
+<main class="card">
+	<div class="bar">
+		<span class="dot r"></span><span class="dot y"></span><span class="dot g"
+		></span>
+		<span class="path">{config.windowPath}</span>
+	</div>
+	<div class="body">
+		<div class="head">
+			<img class="avatar" src={config.avatar} alt={config.name} />
+			<div>
+				<h1>{config.greeting}<span class="cursor">&nbsp;</span></h1>
+				<div class="subtitle">{config.subtitle}</div>
+			</div>
+		</div>
+
+		{
+			config.bio.map((line) => (
+				<p class:list={["bio", { dim: line.dim }]}>
+					<span class="prompt">&gt;</span> {line.text}
+				</p>
+			))
+		}
+
+		<nav class="links">
+			{
+				config.links.map((link) => (
+					<a href={link.url} target="_blank" rel="noopener">
+						{link.icon && <Fragment set:html={icons[link.icon]} />}
+						{link.label}
+					</a>
+				))
+			}
+		</nav>
+	</div>
+</main>

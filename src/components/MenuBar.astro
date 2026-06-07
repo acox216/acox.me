@@ -1,0 +1,71 @@
+---
+import { config } from "../config";
+import { icons } from "../icons";
+---
+
+<div class="menubar" id="menubar">
+	<div class="brand">
+		<span class="logo"></span><span>{config.name}</span>
+	</div>
+	<div class="menus">
+		{
+			config.menus.map((menu, i) => (
+				<div class="menu" data-menu={i}>
+					<button type="button">{menu.label}</button>
+					<div class="dropdown">
+						{menu.items.map((item) => (
+							<a href={item.url} target="_blank" rel="noopener">
+								{item.icon && <Fragment set:html={icons[item.icon]} />}
+								<span>{item.label}</span>
+							</a>
+						))}
+					</div>
+				</div>
+			))
+		}
+	</div>
+	<div class="clock" id="clock"></div>
+</div>
+
+<script>
+	// --- dropdown toggle ---
+	const buttons = document.querySelectorAll<HTMLButtonElement>(
+		".menubar .menu > button"
+	);
+	buttons.forEach((btn) => {
+		btn.addEventListener("click", (e) => {
+			e.stopPropagation();
+			const menu = btn.parentElement!;
+			const isOpen = menu.classList.contains("open");
+			document
+				.querySelectorAll(".menubar .menu.open")
+				.forEach((m) => m.classList.remove("open"));
+			if (!isOpen) menu.classList.add("open");
+		});
+	});
+	document.addEventListener("click", () =>
+		document
+			.querySelectorAll(".menubar .menu.open")
+			.forEach((m) => m.classList.remove("open"))
+	);
+
+	// --- live clock ---
+	const clock = document.getElementById("clock");
+	if (clock) {
+		const tick = () => {
+			const d = new Date();
+			const day = d.toLocaleDateString(undefined, {
+				weekday: "short",
+				month: "short",
+				day: "numeric",
+			});
+			const time = d.toLocaleTimeString(undefined, {
+				hour: "numeric",
+				minute: "2-digit",
+			});
+			clock.textContent = `${day}  ${time}`;
+		};
+		tick();
+		setInterval(tick, 15000);
+	}
+</script>
