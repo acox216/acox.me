@@ -1,27 +1,42 @@
 ---
-import { config } from "../config";
+import { config, isDropdownMenu, linkIsExternal } from "../config";
 import { icons } from "../icons";
 ---
 
-<div class="menubar" id="menubar">
+<div class="menubar" id="menubar" transition:persist="menubar">
 	<div class="brand">
 		<span class="logo"></span><span>{config.name}</span>
 	</div>
 	<div class="menus">
 		{
-			config.menus.map((menu, i) => (
-				<div class="menu" data-menu={i}>
-					<button type="button">{menu.label}</button>
-					<div class="dropdown">
-						{menu.items.map((item) => (
-							<a href={item.url} target="_blank" rel="noopener">
-								{item.icon && <Fragment set:html={icons[item.icon]} />}
-								<span>{item.label}</span>
-							</a>
-						))}
+			config.menus.map((menu, i) =>
+				isDropdownMenu(menu) ? (
+					<div class="menu" data-menu={i}>
+						<button type="button">{menu.label}</button>
+						<div class="dropdown">
+							{menu.items.map((item) => (
+								<a
+									href={item.url}
+									target={linkIsExternal(item) ? "_blank" : undefined}
+									rel={linkIsExternal(item) ? "noopener" : undefined}
+								>
+									{item.icon && <Fragment set:html={icons[item.icon]} />}
+									<span>{item.label}</span>
+								</a>
+							))}
+						</div>
 					</div>
-				</div>
-			))
+				) : (
+					<a
+						class="menu-link"
+						href={menu.url}
+						target={linkIsExternal(menu) ? "_blank" : undefined}
+						rel={linkIsExternal(menu) ? "noopener" : undefined}
+					>
+						{menu.label}
+					</a>
+				)
+			)
 		}
 	</div>
 	<div class="clock" id="clock"></div>

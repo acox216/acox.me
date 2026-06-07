@@ -1,0 +1,105 @@
+/* Long-form article styling. UI/headings stay monospace; body is a readable
+   sans for comfortable reading. */
+.prose {
+	--prose-width: 70ch;
+	color: var(--text);
+	font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+		Helvetica, Arial, sans-serif;
+	font-size: 1.05rem;
+	line-height: 1.75;
+}
+
+.prose > * + * {
+	margin-top: 1.25em;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+	font-family: "JetBrains Mono", ui-monospace, monospace;
+	font-weight: 700;
+	line-height: 1.3;
+	letter-spacing: -0.01em;
+}
+
+.prose h2 {
+	font-size: 1.5rem;
+	margin-top: 2.25em;
+}
+
+.prose h3 {
+	font-size: 1.2rem;
+	margin-top: 1.75em;
+}
+
+.prose a {
+	color: var(--accent);
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+.prose a:hover {
+	text-decoration: none;
+}
+
+.prose strong {
+	color: #fff;
+	font-weight: 700;
+}
+
+.prose ul,
+.prose ol {
+	padding-left: 1.4em;
+}
+.prose ul {
+	list-style: disc;
+}
+.prose ol {
+	list-style: decimal;
+}
+.prose li + li {
+	margin-top: 0.4em;
+}
+
+.prose blockquote {
+	border-left: 3px solid var(--border);
+	padding-left: 1em;
+	color: var(--muted);
+	font-style: italic;
+}
+
+/* inline code */
+.prose :not(pre) > code {
+	font-family: "JetBrains Mono", ui-monospace, monospace;
+	font-size: 0.85em;
+	background: rgba(144, 144, 144, 0.18);
+	padding: 0.15em 0.4em;
+	border-radius: 4px;
+}
+
+/* fenced code blocks (Shiki) */
+.prose pre {
+	font-family: "JetBrains Mono", ui-monospace, monospace;
+	font-size: 0.85rem;
+	line-height: 1.6;
+	padding: 1rem 1.1rem;
+	border-radius: 10px;
+	border: 1px solid var(--border);
+	overflow-x: auto;
+}
+.prose pre code {
+	background: none;
+	padding: 0;
+}
+
+.prose img {
+	max-width: 100%;
+	border-radius: 10px;
+	border: 1px solid var(--border);
+}
+
+.prose hr {
+	border: 0;
+	border-top: 1px solid var(--border);
+	margin: 2.5em 0;
+}

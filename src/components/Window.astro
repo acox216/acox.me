@@ -1,10 +1,10 @@
 ---
-import { config } from "../config";
+import { config, linkIsExternal } from "../config";
 import { icons } from "../icons";
 ---
 
-<main class="card">
-	<div class="bar">
+<main class="card" data-window="profile">
+	<div class="bar" data-drag-handle>
 		<span class="dot r"></span><span class="dot y"></span><span class="dot g"
 		></span>
 		<span class="path">{config.windowPath}</span>
@@ -29,7 +29,11 @@ import { icons } from "../icons";
 		<nav class="links">
 			{
 				config.links.map((link) => (
-					<a href={link.url} target="_blank" rel="noopener">
+					<a
+						href={link.url}
+						target={linkIsExternal(link) ? "_blank" : undefined}
+						rel={linkIsExternal(link) ? "noopener" : undefined}
+					>
 						{link.icon && <Fragment set:html={icons[link.icon]} />}
 						{link.label}
 					</a>
@@ -38,3 +42,10 @@ import { icons } from "../icons";
 		</nav>
 	</div>
 </main>
+
+<script>
+	import { initDraggable } from "../scripts/draggable";
+	// Runs on first load and after every client-side navigation (the window is
+	// recreated when returning to the homepage).
+	document.addEventListener("astro:page-load", initDraggable);
+</script>

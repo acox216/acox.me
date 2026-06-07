@@ -1,0 +1,146 @@
+---
+import Base from "./Base.astro";
+import MenuBar from "../components/MenuBar.astro";
+import "../styles/prose.css";
+
+interface Props {
+	title: string;
+	description: string;
+	pubDate: Date;
+	updatedDate?: Date;
+	tags?: string[];
+	heroImage?: string;
+}
+
+const { title, description, pubDate, updatedDate, tags = [], heroImage } =
+	Astro.props;
+
+const fmt = (d: Date) =>
+	d.toLocaleDateString("en-US", {
+		year: "numeric",
+		month: "long",
+		day: "numeric",
+	});
+---
+
+<Base title={`${title} — Alex Cox`} description={description} ogImage={heroImage}>
+	<MenuBar />
+
+	<main class="article">
+		<a class="back" href="/blog">← All posts</a>
+
+		<article>
+			<header class="post-header">
+				<h1>{title}</h1>
+				<p class="meta">
+					<time datetime={pubDate.toISOString()}>{fmt(pubDate)}</time>
+					{updatedDate && <span> · updated {fmt(updatedDate)}</span>}
+				</p>
+				{
+					tags.length > 0 && (
+						<ul class="tags">
+							{tags.map((t) => (
+								<li>#{t}</li>
+							))}
+						</ul>
+					)
+				}
+			</header>
+
+			{
+				heroImage && (
+					<img class="hero" src={heroImage} alt="" loading="lazy" />
+				)
+			}
+
+			<div class="prose">
+				<slot />
+			</div>
+		</article>
+	</main>
+</Base>
+
+<style>
+	.article {
+		max-width: 760px;
+		margin: 0 auto;
+		padding: calc(var(--menubar-h) + 2.5rem) 1.5rem 4rem;
+	}
+
+	.back {
+		display: inline-block;
+		font-family: "JetBrains Mono", monospace;
+		font-size: 0.82rem;
+		color: var(--muted);
+		text-decoration: none;
+		margin-bottom: 1.75rem;
+	}
+	.back:hover {
+		color: var(--accent);
+	}
+
+	/* a readable "document" panel floating on the desktop */
+	article {
+		background: rgba(13, 17, 23, 0.62);
+		backdrop-filter: blur(12px);
+		-webkit-backdrop-filter: blur(12px);
+		border: 1px solid var(--border);
+		border-radius: 14px;
+		padding: 2.75rem;
+		box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
+	}
+
+	.post-header {
+		margin-bottom: 2rem;
+		padding-bottom: 1.5rem;
+		border-bottom: 1px solid var(--border);
+	}
+
+	.post-header h1 {
+		font-family: "JetBrains Mono", monospace;
+		font-size: 2rem;
+		font-weight: 700;
+		line-height: 1.2;
+		letter-spacing: -0.02em;
+	}
+
+	.meta {
+		margin-top: 0.75rem;
+		font-family: "JetBrains Mono", monospace;
+		font-size: 0.8rem;
+		color: var(--muted);
+	}
+
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		margin-top: 0.85rem;
+		list-style: none;
+		padding: 0;
+	}
+	.tags li {
+		font-family: "JetBrains Mono", monospace;
+		font-size: 0.72rem;
+		color: var(--accent);
+		border: 1px solid var(--border);
+		border-radius: 999px;
+		padding: 0.15rem 0.6rem;
+	}
+
+	.hero {
+		width: 100%;
+		border-radius: 10px;
+		border: 1px solid var(--border);
+		margin-bottom: 2rem;
+	}
+
+	@media (max-width: 600px) {
+		article {
+			padding: 1.75rem 1.4rem;
+		}
+		.post-header h1 {
+			font-size: 1.6rem;
+		}
+	}
+</style>

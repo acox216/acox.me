@@ -1,0 +1,46 @@
+---
+title: "Hello, world"
+description: "The first post on the new acox.me — built with Astro, TypeScript, and a desktop state of mind."
+pubDate: 2026-06-06
+tags: ["meta", "astro"]
+---
+
+import Callout from "../../components/Callout.astro";
+
+Welcome to the new **acox.me**. This site is a small "desktop" — a faux menu
+bar, a draggable terminal window, and now a place to write.
+
+<Callout type="tip">
+	This post is written in **MDX**, so I can drop Astro components right into the
+	prose — like this callout.
+</Callout>
+
+## Why a blog
+
+A landing page says who you are. A blog shows how you think. I want somewhere to
+keep notes on what I'm building — the home lab, Cloudflare experiments, and the
+occasional rabbit hole.
+
+## How it's built
+
+Posts are Markdown/MDX files in `src/content/blog/`, validated by a typed schema
+and rendered to static HTML at build time:
+
+```ts
+const blog = defineCollection({
+	loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/blog" }),
+	schema: z.object({
+		title: z.string(),
+		description: z.string(),
+		pubDate: z.coerce.date(),
+		draft: z.boolean().default(false),
+	}),
+});
+```
+
+Code blocks get syntax highlighting via Shiki, the whole thing builds to static
+files, and it deploys to Cloudflare Workers like the rest of the site.
+
+## What's next
+
+More posts. Maybe more "apps" on the desktop. We'll see.

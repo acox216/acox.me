@@ -1,0 +1,180 @@
+---
+import { config, DEFAULT_OVERLAY } from "../config";
+
+const wp = config.wallpaper;
+const base = "base" in wp && wp.base ? wp.base : "#0b0e14";
+
+// Build a YouTube background embed URL (no-cookie, autoplay, muted, looped).
+function youtubeEmbed(id: string): string {
+	const params = new URLSearchParams({
+		autoplay: "1",
+		mute: "1",
+		loop: "1",
+		playlist: id, // required for loop to work on a single video
+		controls: "0",
+		showinfo: "0",
+		modestbranding: "1",
+		playsinline: "1",
+		rel: "0",
+		disablekb: "1",
+		iv_load_policy: "3",
+	});
+	return `https://www.youtube-nocookie.com/embed/${id}?${params.toString()}`;
+}
+---
+
+{/* Single fixed, non-interactive layer behind everything.
+    `transition:persist` keeps this node (and a playing video) alive across
+    client-side navigations instead of tearing it down and restarting it. */}
+<div
+	class="wallpaper"
+	aria-hidden="true"
+	style={`--wp-base:${base};`}
+	transition:persist="wallpaper"
+>
+	{
+		wp.type === "gradient" && (
+			<div
+				class="wp-layer wp-gradient"
+				style={`--wp-warm:${wp.warm};--wp-mid:${wp.mid};--wp-cool:${wp.cool};--wp-glow:${wp.glow};`}
+			/>
+		)
+	}
+
+	{
+		wp.type === "image" && (
+			<div
+				class="wp-layer wp-image"
+				style={`background-image:url('${wp.src}');background-position:${
+					wp.position ?? "center"
+				};background-size:${wp.size ?? "cover"};`}
+			/>
+		)
+	}
+
+	{
+		wp.type === "video" && (
+			<>
+				{/* Poster still: the only thing shown on mobile / reduced-motion. */}
+				{wp.poster && (
+					<div
+						class="wp-layer wp-poster"
+						style={`background-image:url('${wp.poster}');`}
+					/>
+				)}
+				<div class="wp-layer wp-video">
+					{wp.provider === "file" ? (
+						<video
+							autoplay
+							muted
+							loop
+							playsinline
+							preload="none"
+							poster={wp.poster}
+						>
+							<source src={wp.src} />
+						</video>
+					) : (
+						<iframe
+							src={youtubeEmbed(wp.youtubeId)}
+							title="Background video"
+							allow="autoplay; encrypted-media"
+							tabindex="-1"
+						/>
+					)}
+				</div>
+			</>
+		)
+	}
+
+	{/* Overlay tint for legibility over image/video. */}
+	{
+		(wp.type === "image" || wp.type === "video") && (
+			<div
+				class="wp-layer wp-overlay"
+				style={`background:${wp.overlay ?? DEFAULT_OVERLAY};`}
+			/>
+		)
+	}
+</div>
+
+<style>
+	.wallpaper {
+		position: fixed;
+		inset: 0;
+		z-index: -2;
+		pointer-events: none;
+		background: var(--wp-base, #0b0e14);
+		overflow: hidden;
+	}
+
+	.wp-layer {
+		position: absolute;
+		inset: 0;
+	}
+
+	/* gradient */
+	.wp-gradient {
+		background: linear-gradient(
+				155deg,
+				var(--wp-warm) 0%,
+				var(--wp-mid) 45%,
+				var(--wp-cool) 100%
+			),
+			radial-gradient(120% 120% at 80% 10%, var(--wp-glow) 0%, transparent 55%);
+	}
+
+	/* image + poster */
+	.wp-image,
+	.wp-poster {
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: cover;
+	}
+
+	/* video cover technique */
+	.wp-video video,
+	.wp-video iframe {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 100vw;
+		height: 100vh;
+		object-fit: cover;
+		border: 0;
+	}
+
+	/* scale the 16:9 iframe up so it always covers (no letterboxing/controls) */
+	.wp-video iframe {
+		width: 177.78vh; /* 16/9 * 100vh */
+		min-width: 100vw;
+		height: 56.25vw; /* 9/16 * 100vw */
+		min-height: 100vh;
+	}
+
+	/* By default the video layer is shown and poster hidden. */
+	.wp-poster {
+		display: none;
+	}
+
+	/* On mobile, hide the video and show the poster still instead. */
+	@media (max-width: 767px), (pointer: coarse) {
+		.wp-video {
+			display: none;
+		}
+		.wp-poster {
+			display: block;
+		}
+	}
+
+	/* Respect reduced-motion: no autoplaying video, fall back to poster. */
+	@media (prefers-reduced-motion: reduce) {
+		.wp-video {
+			display: none;
+		}
+		.wp-poster {
+			display: block;
+		}
+	}
+</style>
