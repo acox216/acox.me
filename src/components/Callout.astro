@@ -1,0 +1,42 @@
+---
+interface Props {
+	type?: "note" | "tip" | "warning";
+}
+const { type = "note" } = Astro.props;
+const label = { note: "Note", tip: "Tip", warning: "Warning" }[type];
+---
+
+<aside class={`callout callout-${type}`}>
+	<strong class="callout-label">{label}</strong>
+	<div class="callout-body"><slot /></div>
+</aside>
+
+<style>
+	.callout {
+		border-left: 3px solid var(--accent, #58a6ff);
+		background: rgba(88, 166, 255, 0.08);
+		border-radius: 6px;
+		padding: 0.85rem 1rem;
+		margin: 1.5rem 0;
+	}
+	.callout-tip {
+		border-left-color: #3fb950;
+		background: rgba(63, 185, 80, 0.08);
+	}
+	.callout-warning {
+		border-left-color: #d29922;
+		background: rgba(210, 153, 34, 0.08);
+	}
+	.callout-label {
+		display: block;
+		font-family: "JetBrains Mono", monospace;
+		font-size: 0.75rem;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		margin-bottom: 0.35rem;
+		opacity: 0.85;
+	}
+	.callout-body :global(p:last-child) {
+		margin-bottom: 0;
+	}
+</style>

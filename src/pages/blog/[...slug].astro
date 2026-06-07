@@ -1,0 +1,23 @@
+---
+import { getCollection, render } from "astro:content";
+import type { GetStaticPaths } from "astro";
+import BlogPost from "../../layouts/BlogPost.astro";
+
+export const getStaticPaths = (async () => {
+	// Drafts are excluded from production builds but visible in dev.
+	const posts = await getCollection("blog", ({ data }) =>
+		import.meta.env.PROD ? !data.draft : true
+	);
+	return posts.map((post) => ({
+		params: { slug: post.id },
+		props: { post },
+	}));
+}) satisfies GetStaticPaths;
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<BlogPost {...post.data}>
+	<Content />
+</BlogPost>
