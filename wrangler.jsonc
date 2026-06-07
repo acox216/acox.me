@@ -20,5 +20,20 @@
 	},
 	"observability": {
 		"enabled": true
+	},
+	"preview_urls": false,
+	/**
+	 * Bindings the @astrojs/cloudflare adapter expects. Pinning them here stops
+	 * wrangler from auto-provisioning (and re-creating) them on every deploy.
+	 */
+	"kv_namespaces": [
+		{
+			"binding": "SESSION",
+			"id": "95453ba72c544b7e8cf36541199ba181"
+		}
+	],
+	// Cloudflare Images binding for Astro's image service (no id needed).
+	"images": {
+		"binding": "IMAGES"
 	}
 }
