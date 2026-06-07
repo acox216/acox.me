@@ -4,9 +4,9 @@ import { icons } from "../icons";
 ---
 
 <div class="menubar" id="menubar" transition:persist="menubar">
-	<a class="brand" href="/">
+	<div class="brand">
 		<span class="logo"></span><span>{config.name}</span>
-	</a>
+	</div>
 	<div class="menus">
 		{
 			config.menus.map((menu, i) =>
