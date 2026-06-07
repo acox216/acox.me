@@ -144,8 +144,8 @@ export const config: SiteConfig = {
 		// cool: "rgba(66, 95, 199, 0.6)",
 		// glow: "rgba(88, 166, 255, 0.25)",
 		type: "video",
-		provider: "youtube",
-		youtubeId: "M3dhlboim9E",
+		provider: "file",
+		src: "/bg.mp4",
 		poster: "/wallpapers/desktop.jpg", // shown on mobile / reduced-motion
 		overlay: DEFAULT_OVERLAY,
 	},
