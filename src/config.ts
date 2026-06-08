@@ -137,17 +137,12 @@ export const config: SiteConfig = {
 
 	// Desktop wallpaper — switch the `type` to change the background.
 	wallpaper: {
-		// type: "gradient",
-		// base: "#0b0e14",
-		// warm: "rgba(156, 122, 82, 0.55)",
-		// mid: "rgba(40, 44, 70, 0.65)",
-		// cool: "rgba(66, 95, 199, 0.6)",
-		// glow: "rgba(88, 166, 255, 0.25)",
-		type: "video",
-		provider: "file",
-		src: "/bg.mp4",
-		poster: "/wallpapers/desktop.jpg", // shown on mobile / reduced-motion
-		overlay: DEFAULT_OVERLAY,
+		type: "gradient",
+		base: "#0b0e14",
+		warm: "rgba(156, 122, 82, 0.55)",
+		mid: "rgba(40, 44, 70, 0.65)",
+		cool: "rgba(66, 95, 199, 0.6)",
+		glow: "rgba(88, 166, 255, 0.25)",
 	},
 	// --- Other wallpaper options (replace `wallpaper` above with one of these) ---
 	//
