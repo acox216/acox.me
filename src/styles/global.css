@@ -356,9 +356,72 @@ h1 {
 	height: 15px;
 	fill: currentColor;
 }
+.menubar .mobile-menu-btn {
+	display: none;
+}
+
+.menubar .mobile-dropdown {
+	display: none;
+}
 
 @media (max-width: 480px) {
 	.menubar .menus {
 		display: none;
+	}
+
+	.menubar .mobile-menu-btn {
+		display: block;
+		font: inherit;
+		color: rgba(255, 255, 255, 0.82);
+		background: transparent;
+		border: 0;
+		padding: 0.2rem 0.55rem;
+		border-radius: 6px;
+		cursor: pointer;
+		transition: background 0.15s ease;
+	}
+
+	.menubar .mobile-menu-btn:hover,
+	.menubar .mobile-menu-btn.open {
+		background: rgba(255, 255, 255, 0.12);
+	}
+
+	.menubar .mobile-dropdown.open {
+		display: flex;
+		flex-direction: column;
+		position: absolute;
+		top: calc(var(--menubar-h) + 4px);
+		left: 0;
+		right: 0;
+		background: rgba(22, 27, 34, 0.96);
+		backdrop-filter: blur(18px);
+		-webkit-backdrop-filter: blur(18px);
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+		padding: 0.35rem;
+		gap: 1px;
+		box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+	}
+
+	.menubar .mobile-dropdown a {
+		display: flex;
+		align-items: center;
+		gap: 0.55rem;
+		padding: 0.55rem 0.75rem;
+		color: var(--text);
+		text-decoration: none;
+		border-radius: 6px;
+		font-size: 0.82rem;
+	}
+
+	.menubar .mobile-dropdown a:hover {
+		background: rgba(88, 166, 255, 0.16);
+		color: var(--accent);
+	}
+
+	.menubar .mobile-dropdown a svg {
+		width: 14px;
+		height: 14px;
+		fill: currentColor;
+		opacity: 0.85;
 	}
 }

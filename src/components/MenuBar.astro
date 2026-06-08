@@ -1,6 +1,10 @@
 ---
 import { config, isDropdownMenu, linkIsExternal } from "../config";
 import { icons } from "../icons";
+
+const allLinks = config.menus.flatMap((menu) =>
+	isDropdownMenu(menu) ? menu.items : [menu]
+);
 ---
 
 <div class="menubar" id="menubar" transition:persist="menubar">
@@ -39,6 +43,21 @@ import { icons } from "../icons";
 			)
 		}
 	</div>
+	<button type="button" class="mobile-menu-btn" id="mobile-menu-btn">Menu</button>
+	<div class="mobile-dropdown" id="mobile-dropdown">
+		{
+			allLinks.map((item) => (
+				<a
+					href={item.url}
+					target={linkIsExternal(item) ? "_blank" : undefined}
+					rel={linkIsExternal(item) ? "noopener" : undefined}
+				>
+					{"icon" in item && item.icon && <Fragment set:html={icons[item.icon]} />}
+					<span>{item.label}</span>
+				</a>
+			))
+		}
+	</div>
 	<div class="clock" id="clock"></div>
 </div>
 
@@ -63,6 +82,19 @@ import { icons } from "../icons";
 			.querySelectorAll(".menubar .menu.open")
 			.forEach((m) => m.classList.remove("open"))
 	);
+
+	// --- mobile menu toggle ---
+	const mobileBtn = document.getElementById("mobile-menu-btn");
+	const mobileDropdown = document.getElementById("mobile-dropdown");
+	mobileBtn?.addEventListener("click", (e) => {
+		e.stopPropagation();
+		const isOpen = mobileDropdown?.classList.toggle("open");
+		mobileBtn.classList.toggle("open", isOpen);
+	});
+	document.addEventListener("click", () => {
+		mobileDropdown?.classList.remove("open");
+		mobileBtn?.classList.remove("open");
+	});
 
 	// --- live clock ---
 	const clock = document.getElementById("clock");
