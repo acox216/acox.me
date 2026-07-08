@@ -1,23 +1,36 @@
 ---
-import { getCollection, render } from "astro:content";
-import type { GetStaticPaths } from "astro";
+export const prerender = false;
+
+import { render } from "astro:content";
 import BlogPost from "../../layouts/BlogPost.astro";
+import { getPost } from "../../lib/posts";
 
-export const getStaticPaths = (async () => {
-	// Drafts are excluded from production builds but visible in dev.
-	const posts = await getCollection("blog", ({ data }) =>
-		import.meta.env.PROD ? !data.draft : true
-	);
-	return posts.map((post) => ({
-		params: { slug: post.id },
-		props: { post },
-	}));
-}) satisfies GetStaticPaths;
+const { slug = "" } = Astro.params;
+const post = slug ? await getPost(slug) : null;
 
-const { post } = Astro.props;
-const { Content } = await render(post);
+if (!post) {
+	return new Response("Post not found", { status: 404 });
+}
+
+Astro.response.headers.set("Cache-Control", "public, s-maxage=300");
+
+// MDX posts render via Astro's <Content/>; Ghost posts are pre-rendered HTML.
+let Content: Awaited<ReturnType<typeof render>>["Content"] | null = null;
+if (post.source === "mdx") {
+	Content = (await render(post.entry)).Content;
+}
+
+const { meta } = post;
 ---
 
-<BlogPost {...post.data}>
-	<Content />
+<BlogPost
+	title={meta.title}
+	description={meta.excerpt}
+	pubDate={meta.date}
+	updatedDate={meta.updatedDate}
+	tags={meta.tags}
+	heroImage={meta.heroImage}
+>
+	{post.source === "mdx" && Content && <Content />}
+	{post.source === "ghost" && <Fragment set:html={post.html} />}
 </BlogPost>

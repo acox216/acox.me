@@ -2,9 +2,12 @@
  * Cloudflare Workers config for deploying the Astro build.
  * Docs: https://developers.cloudflare.com/workers/wrangler/configuration/
  *
- * `main` points at the adapter's server entrypoint so on-demand routes work
- * once we add them (export const prerender = false). Until then every page is
- * prerendered into ./dist/client and served as a static asset.
+ * `main` points at the adapter's server entrypoint. Blog routes render
+ * on-demand (export const prerender = false) and fetch from Ghost; the rest of
+ * the site is prerendered into ./dist/client and served as static assets.
+ *
+ * Secrets (set with `wrangler secret put NAME`, not stored here):
+ *   GHOST_CONTENT_API_KEY, CF_ACCESS_CLIENT_ID, CF_ACCESS_CLIENT_SECRET
  *
  * Deploy:  npm run build && npx wrangler deploy
  */
@@ -22,6 +25,11 @@
 		"enabled": true
 	},
 	"preview_urls": false,
+	// Non-secret config. The Ghost Content API key + CF Access service token are
+	// secrets (wrangler secret put / dashboard), not stored here.
+	"vars": {
+		"GHOST_URL": "https://cms.acox.dev"
+	},
 	/**
 	 * Bindings the @astrojs/cloudflare adapter expects. Pinning them here stops
 	 * wrangler from auto-provisioning (and re-creating) them on every deploy.
