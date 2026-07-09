@@ -7,8 +7,6 @@ import { getAllPosts } from "../../lib/posts";
 
 const posts = await getAllPosts();
 
-Astro.response.headers.set("Cache-Control", "public, s-maxage=300");
-
 const fmt = (d: Date) =>
 	d.toLocaleDateString("en-US", {
 		year: "numeric",
