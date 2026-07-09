@@ -2,7 +2,7 @@
 import { config, isDropdownMenu, linkIsExternal, type LinkItem } from "../config";
 import { icons } from "../icons";
 
-// A LinkMenu is structurally assignable to LinkItem (icon is optional), so the
+// A LinkMenu is structurally assignable to LinkItem (icon optional), so the
 // flattened list is uniformly LinkItem[] — no per-item narrowing needed.
 const allLinks: LinkItem[] = config.menus.flatMap((menu) =>
 	isDropdownMenu(menu) ? menu.items : [menu]
@@ -10,9 +10,9 @@ const allLinks: LinkItem[] = config.menus.flatMap((menu) =>
 ---
 
 <div class="menubar" id="menubar" transition:persist="menubar">
-	<div class="brand">
-		<span class="logo"></span><span>{config.name}</span>
-	</div>
+	<a class="brand" href="/" aria-label={config.name}>
+		<span class="mark">ac</span><span class="underscore">_</span>
+	</a>
 	<div class="menus">
 		{
 			config.menus.map((menu, i) =>
