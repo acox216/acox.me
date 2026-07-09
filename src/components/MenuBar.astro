@@ -1,8 +1,10 @@
 ---
-import { config, isDropdownMenu, linkIsExternal } from "../config";
+import { config, isDropdownMenu, linkIsExternal, type LinkItem } from "../config";
 import { icons } from "../icons";
 
-const allLinks = config.menus.flatMap((menu) =>
+// A LinkMenu is structurally assignable to LinkItem (icon is optional), so the
+// flattened list is uniformly LinkItem[] — no per-item narrowing needed.
+const allLinks: LinkItem[] = config.menus.flatMap((menu) =>
 	isDropdownMenu(menu) ? menu.items : [menu]
 );
 ---
@@ -52,7 +54,7 @@ const allLinks = config.menus.flatMap((menu) =>
 					target={linkIsExternal(item) ? "_blank" : undefined}
 					rel={linkIsExternal(item) ? "noopener" : undefined}
 				>
-					{"icon" in item && item.icon && <Fragment set:html={icons[item.icon]} />}
+					{item.icon && <Fragment set:html={icons[item.icon]} />}
 					<span>{item.label}</span>
 				</a>
 			))

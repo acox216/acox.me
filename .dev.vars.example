@@ -1,0 +1,13 @@
+# Local dev secrets for `astro dev` (Cloudflare platformProxy reads this).
+# Copy to `.dev.vars` (gitignored) and fill in real values.
+#
+# GHOST_URL comes from wrangler.jsonc `vars` in dev; uncomment to override.
+# GHOST_URL="https://cms.acox.dev"
+
+# Ghost read-only Content API key (Ghost admin → Settings → Integrations).
+GHOST_CONTENT_API_KEY=""
+
+# Cloudflare Access service token for the Worker → Ghost Content API.
+# (Zero Trust → Access → Service Auth → create a service token.)
+CF_ACCESS_CLIENT_ID=""
+CF_ACCESS_CLIENT_SECRET=""

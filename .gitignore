@@ -14,6 +14,7 @@ npm-debug.log*
 .env
 .env.production
 .env.local
+.dev.vars
 
 # os
 .DS_Store
