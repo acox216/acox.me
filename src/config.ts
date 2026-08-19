@@ -137,7 +137,8 @@ export const config: SiteConfig = {
 
 	// Desktop wallpaper — switch the `type` to change the background.
 	wallpaper: {
-		type: "gradient",
+		type: "image",
+		src: "/wallpapers/austin.jpg",
 		base: "#0b0e14",
 		warm: "rgba(156, 122, 82, 0.55)",
 		mid: "rgba(40, 44, 70, 0.65)",
