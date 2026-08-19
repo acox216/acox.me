@@ -121,16 +121,16 @@ export interface SiteConfig {
 export const config: SiteConfig = {
 	name: "Alex Cox",
 	greeting: "Hi, I'm Alex",
-	subtitle: "Software Developer",
+	subtitle: "Software Engineer",
 	avatar: "/profile.jpg",
 	windowPath: "~/alcox",
 	accent: "#58a6ff",
-	description: "Alex Cox — Software Developer.",
+	description: "Alex Cox — software engineer working on distributed systems, IoT & edge, and stream processing. I build systems people can run without me.",
 
 	bio: [
-		{ text: "Software developer currently working in the e-commerce industry." },
+		{ text: "Working on distributed systems, IoT & edge, and stream processing." },
 		{
-			text: "Driven to help people grow and improve the lives of many.",
+			text: "I build systems people can run without me.",
 			dim: true,
 		},
 	],
