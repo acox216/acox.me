@@ -184,7 +184,7 @@ export const config: SiteConfig = {
 
 	menus: [
 		{ label: "Home", url: "/" },
-		{ label: "Blog", url: "/blog" },
+		//{ label: "Blog", url: "/blog" },
 		{
 			label: "Connect",
 			items: [
